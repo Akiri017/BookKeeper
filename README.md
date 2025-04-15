@@ -93,4 +93,4 @@ Testing With Postman:
 ---
 
 ## 📄 License
-MIT License © 2025 Marianne Angelika B. Santos
+MIT License © 2025 Akiri017
