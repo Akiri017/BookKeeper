@@ -1,5 +1,5 @@
 package com.bookkeeper.bookkeeper_backend.Exception;
-
+ 
 public class BookNotFoundException extends RuntimeException {
     public BookNotFoundException(Long id) {
         super("Book not found with id: " + id);

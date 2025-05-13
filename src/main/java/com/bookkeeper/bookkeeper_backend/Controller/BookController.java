@@ -2,6 +2,7 @@ package com.bookkeeper.bookkeeper_backend.Controller;
 
 import com.bookkeeper.bookkeeper_backend.BookUpdateDTO;
 import com.bookkeeper.bookkeeper_backend.Model.Book;
+import com.bookkeeper.bookkeeper_backend.Model.ReadingStatus;
 import com.bookkeeper.bookkeeper_backend.Service.BookService;
 import com.bookkeeper.bookkeeper_backend.Exception.BookNotFoundException;
 
@@ -43,6 +44,23 @@ public class BookController {
     @Operation(summary = "Get all books", description = "Retrieves a list of all books")
     public ResponseEntity<List<Book>> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks());
+    }
+
+    @GetMapping("/search")
+    @Operation(summary = "Search books", description = "Search books by various criteria")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Search completed successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid search parameters")
+    })
+    public ResponseEntity<List<Book>> searchBooks(
+            @Parameter(description = "Title of the book") @RequestParam(required = false) String title,
+            @Parameter(description = "Author of the book") @RequestParam(required = false) String author,
+            @Parameter(description = "Reading status") @RequestParam(required = false) ReadingStatus status,
+            @Parameter(description = "Rating (1-5)") @RequestParam(required = false) Integer rating,
+            @Parameter(description = "Tag name") @RequestParam(required = false) String tagName,
+            @Parameter(description = "Start date (yyyy-MM-dd)") @RequestParam(required = false) String startDate,
+            @Parameter(description = "End date (yyyy-MM-dd)") @RequestParam(required = false) String endDate) {
+        return ResponseEntity.ok(bookService.searchBooks(title, author, status, rating, tagName, startDate, endDate));
     }
 
     @GetMapping("/{id}")
