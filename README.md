@@ -7,7 +7,7 @@ Track your reading journey — from current reads to your favorite quotes.
 
 ## 🌐 Background
 
-BookKeeper is a minimalist backend system that allows users to keep track of the books they’ve read, are currently reading, or plan to read. It stores information such as the book’s title, author, reading status, rating, summary, quotes, and tags — and includes a cover photo link.
+BookKeeper is a minimalist backend system that allows users to keep track of the books they've read, are currently reading, or plan to read. It stores information such as the book's title, author, reading status, rating, summary, quotes, and tags — and includes a cover photo link.
 
 ---
 
@@ -20,8 +20,8 @@ BookKeeper is a minimalist backend system that allows users to keep track of the
 - Assign custom tags
 - Search and filter by tags, author, rating, or status
 - Attach a cover image URL
-- User login and personalized book log
-- Export book summaries and quotes to PDF 
+- RESTful API with OpenAPI documentation
+- SQLite database for persistent storage
 
 ---
 
@@ -29,25 +29,31 @@ BookKeeper is a minimalist backend system that allows users to keep track of the
 
 ### ⚙️ Prerequisites
 
-- Java 17 or later
+- Java 21 or later
 - Maven
 
 ### 🧰 Installation
 
 Clone the repository:
 
+```bash
 git clone https://github.com/your-username/bookkeeper-backend.git
 cd bookkeeper-backend
+```
 
 Run the app with Maven:
 
+```bash
 mvn spring-boot:run
+```
 
 The application will be available at:
 
 http://localhost:8080
 
-  ⚠️ Requires Java 17+ and Maven. By default, the app uses H2 in-memory database. You can switch to MySQL by editing the application.properties file.
+API documentation is available at:
+
+http://localhost:8080/swagger-ui.html
 
 ### 📬 API Endpoints
 
@@ -56,11 +62,13 @@ http://localhost:8080
 | GET    | /books          | Get all books          |
 | GET    | /books/{id}     | Get a specific book    |
 | POST   | /books          | Add a new book         |
-| PUT    | /books/{id}     | Update an existing book|
+| PATCH  | /books/{id}     | Update an existing book|
 | DELETE | /books/{id}     | Delete a book          |
+| GET    | /books/search   | Search books with filters|
 
-Sample JSON (POST/PUT)
+Sample JSON (POST/PATCH)
 
+```json
 {
   "title": "Atomic Habits",
   "author": "James Clear",
@@ -69,25 +77,38 @@ Sample JSON (POST/PUT)
   "status": "FINISHED",
   "rating": 5,
   "summary": "A powerful guide to building habits.",
-  "favoriteQuotes": "You do not rise to the level of your goals...",
-  "tags": "Self-help, Psychology",
-  "coverPhotoUrl": "https://example.com/cover.jpg"
+  "addQuotes": [
+    {
+      "content": "You do not rise to the level of your goals..."
+    }
+  ],
+  "addTags": [
+    {
+      "name": "Self-help"
+    },
+    {
+      "name": "Psychology"
+    }
+  ],
+  "coverImageUrl": "https://example.com/cover.jpg"
 }
+```
 
-Testing With Postman:
-- Open Postman
-- Set the request type to POST, GET, PUT, or DELETE
-- Enter the request URL (e.g. http://localhost:8080/books)
-- For POST or PUT, go to the Body tab → Select raw → Set format to JSON
-- Paste the sample JSON above and click Send
-- View the response in the Body section
+Search Parameters:
+- title: Search by book title
+- author: Search by author name
+- status: Filter by reading status (TO_READ, IN_PROGRESS, FINISHED)
+- rating: Filter by rating (1-5)
+- tagName: Filter by tag
+- startDate: Filter by start date (yyyy-MM-dd)
+- endDate: Filter by end date (yyyy-MM-dd)
 
 ---
 
 ## ❗ Caveats & Limitations
 - No authentication or user system yet
-- No pagination or filtering in the API
-- Relies on in-memory H2 database unless configured otherwise
+- No pagination implemented yet
+- Uses SQLite database for storage
 - This project is under active development — expect changes!
 
 ---
